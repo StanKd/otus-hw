@@ -1,13 +1,8 @@
-#define BOOST_TEST_MODULE test_version
+#include <gtest/gtest.h>
 
 #include "lib.h"
 
-#include <boost/test/unit_test.hpp>
-
-BOOST_AUTO_TEST_SUITE(test_version)
-
-BOOST_AUTO_TEST_CASE(test_valid_version) {
-	BOOST_CHECK(version() > 0);
+TEST(testVersion, GT)
+{
+    EXPECT_GT (version(), 0) << "version must be greater then 0";
 }
-
-BOOST_AUTO_TEST_SUITE_END()
