@@ -44,7 +44,7 @@ if(WITH_GTEST)
             GTest::gtest_main
     )
 
-    include(googletest)
+    include(GoogleTest)
     gtest_discover_tests(testVersion)
 
     set_target_properties(testVersion PROPERTIES
