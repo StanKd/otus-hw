@@ -37,7 +37,7 @@ if(WITH_GTEST)
 #    add_compile_options(-O0 -g3)
     FetchContent_MakeAvailable(googletest)
 
-    add_executable (testVersion WIN32 test_version.cpp)
+    add_executable (testVersion test_version.cpp)
 
     target_link_libraries(
             testVersion
