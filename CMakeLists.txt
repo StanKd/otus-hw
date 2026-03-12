@@ -3,26 +3,29 @@ cmake_minimum_required(VERSION 3.12)
 set(PATCH_VERSION "1" CACHE INTERNAL "Patch version")
 set(PROJECT_VERSION 0.0.${PATCH_VERSION})
 
-project(helloworld VERSION ${PROJECT_VERSION})
+project(ip_filter VERSION ${PROJECT_VERSION})
 
-option(WITH_GTEST "Whether to build Google test" ON)
+option(WITH_GTEST "Whether to build Google test" OFF)
 
 configure_file(version.h.in version.h)
 
-add_executable(helloworld_cli main.cpp)
-add_library(helloworld lib.cpp)
+add_executable(ip_filter ip_filter.cpp)
 
-set_target_properties(helloworld_cli helloworld PROPERTIES
-    CXX_STANDARD 14
+set_target_properties(ip_filter PROPERTIES
+    CXX_STANDARD 17
     CXX_STANDARD_REQUIRED ON
 )
 
-target_include_directories(helloworld
-    PRIVATE "${CMAKE_BINARY_DIR}"
+add_definitions(
+#        -DPRINT_TIME
 )
 
-target_link_libraries(helloworld_cli PRIVATE
-    helloworld
+if(WIN32)
+    target_link_libraries(ip_filter ws2_32)
+endif()
+
+target_include_directories(ip_filter
+    PRIVATE "${CMAKE_BINARY_DIR}"
 )
 
 if(WITH_GTEST)
@@ -34,7 +37,6 @@ if(WITH_GTEST)
     )
     # For Windows: Prevent overriding the parent project's compiler/linker settings
     set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
-#    add_compile_options(-O0 -g3)
     FetchContent_MakeAvailable(googletest)
 
     add_executable (testVersion test_version.cpp)
@@ -48,7 +50,7 @@ if(WITH_GTEST)
     gtest_discover_tests(testVersion)
 
     set_target_properties(testVersion PROPERTIES
-        CXX_STANDARD 14
+        CXX_STANDARD 17
         CXX_STANDARD_REQUIRED ON
     )
 
@@ -58,10 +60,10 @@ if(WITH_GTEST)
 endif()
 
 if (MSVC)
-    target_compile_options(helloworld_cli PRIVATE
+    target_compile_options(ip_filter PRIVATE
         /W4
     )
-    target_compile_options(helloworld PRIVATE
+    target_compile_options(ip_filter PRIVATE
         /W4
     )
     if(WITH_GTEST)
@@ -70,10 +72,10 @@ if (MSVC)
         )
     endif()
 else ()
-    target_compile_options(helloworld_cli PRIVATE
+    target_compile_options(ip_filter PRIVATE
         -Wall -Wextra -pedantic -Werror
     )
-    target_compile_options(helloworld PRIVATE
+    target_compile_options(ip_filter PRIVATE
         -Wall -Wextra -pedantic -Werror
     )
     if(WITH_GTEST)
@@ -83,7 +85,7 @@ else ()
     endif()
 endif()
 
-install(TARGETS helloworld_cli RUNTIME DESTINATION bin)
+install(TARGETS ip_filter RUNTIME DESTINATION bin)
 
 set(CPACK_GENERATOR DEB)
 set(CPACK_PACKAGE_VERSION_MAJOR "${PROJECT_VERSION_MAJOR}")
