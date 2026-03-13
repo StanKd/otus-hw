@@ -1,4 +1,3 @@
-#include <array>
 #include <cassert>
 #include <cstdlib>
 #include <iostream>
@@ -15,11 +14,7 @@
     #include <arpa/inet.h>
 #endif
 
-union IPv4
-{
-    uint32_t addr; // 32 bit notation
-    uint8_t bytes[4];
-};
+#include"ip_filter.hpp"
 
 static IPv4 parseLine(const std::string& str)
 {
