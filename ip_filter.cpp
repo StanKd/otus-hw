@@ -42,7 +42,6 @@ static IPv4 parseLine(const std::string& str)
         }
     }
 
-    ip.addr = ntohl(ip.addr);
     return ip;
 }
 
@@ -57,12 +56,8 @@ static void printTime(T t1, T t2)
 }
 #endif
 
-static void printIP(IPv4 &ip, const bool reverse = true)
+static void printIP(const IPv4 &ip)
 {
-    if (reverse)
-    {
-        ip.addr = htonl(ip.addr);
-    }
     std:: cout << static_cast<unsigned int>(ip.bytes[0]) << '.'
                << static_cast<unsigned int>(ip.bytes[1]) << '.'
                << static_cast<unsigned int>(ip.bytes[2]) << '.'
@@ -90,13 +85,12 @@ void filter (const std::optional<std::uint8_t> any,
     {
         for (auto ip : v)
         {
-            ip.addr = htonl(ip.addr);
             if ((b0.has_value() ? b0.value() == ip.bytes[0] : true) &&
                 (b1.has_value() ? b1.value() == ip.bytes[1] : true) &&
                 (b2.has_value() ? b2.value() == ip.bytes[2] : true) &&
                 (b3.has_value() ? b3.value() == ip.bytes[3] : true))
             {
-                printIP(ip, false);
+                printIP(ip);
             }
         }
     }
@@ -121,19 +115,20 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char const* argv[])
         // TODO reverse lexicographically sort - selection
         for (unsigned i = 0U; i < ips.size(); ++i)
         {
-            IPv4 biggest{};
+            std::uint32_t biggest{};
             unsigned biggestIndex = 0U;
             for (unsigned j = i; j < ips.size(); ++j)
             {
-                if (ips[j].addr > biggest.addr)
+                std::uint32_t ip = ntohl(ips[j].addr);
+                if (ip > biggest)
                 {
-                    biggest = ips[j];
+                    biggest = ip;
                     biggestIndex = j;
                 }
             }
             std::swap(ips[i], ips[biggestIndex]);
 
-            printIP(biggest);
+            printIP(ips[i]);
         }
 
         // 222.173.235.246
