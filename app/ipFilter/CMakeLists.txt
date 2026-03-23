@@ -6,5 +6,4 @@ if (WIN32)
     target_link_libraries(${PROJECT_NAME} ws2_32)
 endif ()
 
-list (GET ${PROJECT_NAME}_HEADER 0 target_INCLUDE_DIRS_FIRST)
 target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_LIST_DIR}/inc)
