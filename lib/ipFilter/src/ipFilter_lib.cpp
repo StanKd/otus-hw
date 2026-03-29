@@ -31,8 +31,12 @@ bool parseLine(const std::string &str, IPv4 &ip) {
         }
     }
 
-    ip = ip_;
-    return true;
+    if (num == std::size(ip.bytes)) {
+        ip = ip_;
+        return true;
+    }
+
+    return false;
 }
 
 void printIP(const IPv4 &ip) {
@@ -74,8 +78,3 @@ void filterByReq(const std::vector<IPv4> &v, const fltReq req0, const fltReq req
         }
     }
 }
-
-//template<typename... TArgs>
-//void filter(const std::vector<IPv4> &v, TArgs... req) {
-//    filterByReq(v, req...);
-//}

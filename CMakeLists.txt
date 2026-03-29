@@ -5,6 +5,7 @@ set(PROJECT_VERSION 0.0.${PATCH_VERSION})
 
 project(ipFilter VERSION ${PROJECT_VERSION})
 
+include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/find-gtest.cmake)
 add_subdirectory(lib)
 add_subdirectory(app)
 
