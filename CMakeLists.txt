@@ -1,22 +1,24 @@
-cmake_minimum_required(VERSION 3.12)
+cmake_minimum_required(VERSION 3.13)
 
 set(PATCH_VERSION "1" CACHE INTERNAL "Patch version")
 set(PROJECT_VERSION 0.0.${PATCH_VERSION})
 
-project(ipFilter VERSION ${PROJECT_VERSION})
+project(Allocator VERSION ${PROJECT_VERSION})
 
 include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/find-gtest.cmake)
 add_subdirectory(lib)
 add_subdirectory(app)
 
 set_target_properties(${PROJECT_NAME} PROPERTIES
-        CXX_STANDARD 17
+        CXX_STANDARD 20
         CXX_STANDARD_REQUIRED ON
 )
 
 target_include_directories(${PROJECT_NAME}
         PRIVATE "${CMAKE_BINARY_DIR}"
 )
+
+target_link_libraries(${PROJECT_NAME} allocatorLib)
 
 if (MSVC)
     target_compile_options(${PROJECT_NAME} PRIVATE
