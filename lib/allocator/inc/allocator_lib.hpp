@@ -47,13 +47,13 @@ struct MyAllocator {
         if (state_->currentNum_ + n > NMax) {
             throw std::bad_alloc();
         }
-        T *p = std::allocator<T>{}.allocate(n);
+        void* p = ::operator new(n * sizeof(value_type));
         state_->currentNum_ += n;
-        return p;
+        return static_cast<value_type*>(p);
     }
 
     void deallocate(value_type *p, std::size_t n) noexcept {
-        std::allocator<T>{}.deallocate(p, n);
+        delete(p);
         state_->currentNum_ -= n;
     }
 };
